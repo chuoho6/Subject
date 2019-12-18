@@ -1,0 +1,43 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+url='https://finance.naver.com/marketindex/exchangeDailyQuote.nhn?marketindexCd=FX_USDKRW&page=1'
+tables = pd.read_html(url)
+df1=tables[0]
+url2='https://finance.naver.com/marketindex/exchangeDailyQuote.nhn?marketindexCd=FX_JPYKRW&page=1'
+tables = pd.read_html(url2)
+df2=tables[0]
+url3='https://finance.naver.com/marketindex/exchangeDailyQuote.nhn?marketindexCd=FX_CNYKRW&page=1'
+tables = pd.read_html(url3)
+df3=tables[0]
+
+
+
+
+sumdf=pd.DataFrame
+
+
+
+sumdf=pd.DataFrame(
+    data={'날짜':df1.iloc[0:6,0],'달러시세':df1.iloc[0:6,3],'엔화시세':df2.iloc[0:6,3],'위안화시세':df3.iloc[0:6,3]},
+    columns=['날짜','달러시세','엔화시세','위안화시세']
+
+)
+
+print(sumdf)
+print(sumdf.groupby(['달러시세'])['날짜'].min())
+print(sumdf.groupby(['엔화시세'])['날짜'].min())
+print(sumdf.groupby(['위안화시세'])['날짜'].min())
+
+plt.title('Exchanges')
+plt.plot(sumdf['날짜'],sumdf['달러시세'])
+plt.plot(sumdf['날짜'],sumdf['엔화시세'])
+plt.plot(sumdf['날짜'],sumdf['위안화시세'])
+plt.legend(['USD','JPY','CNY'])
+plt.show()
+
+plt.subplot(311)
+plt.plot(sumdf['날짜'],sumdf['달러시세'])
+plt.subplot(312)
+plt.plot(sumdf['날짜'],sumdf['엔화시세'])
+plt.subplot(313)
+plt.plot(sumdf['날짜'],sumdf['위안화시세'])
